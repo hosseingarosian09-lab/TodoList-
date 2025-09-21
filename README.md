@@ -1,13 +1,28 @@
-# To-Do List CLI Application
+# To-Do List CLI Application (v2 in Progress 🚧)
 
 A simple command-line To-Do List manager in Python that supports multiple lists, task priorities, and CSV import/export.
 
-## Features
+---
+
+## 🚀 Version 2 In Progress
+
+**This repository is currently being updated for version 2!**  
+New features, improvements, and refactoring are underway. Stay tuned for updates.
+
+---
+
+## Features (v1)
 
 - Create and manage multiple to-do lists
 - Add, remove, and view tasks with title, description, and priority (1-5)
 - Save and load lists as CSV files
 - Lists and tasks are managed interactively via a menu
+
+## Planned for v2
+
+- Improved user interface and experience
+- **Graphical User Interface (UI) coming soon!**
+- More flexible task management
 
 ## Usage
 
@@ -36,7 +51,6 @@ A simple command-line To-Do List manager in Python that supports multiple lists,
 
 - Python 3.x
 
-## Notes
+---
 
-- Only one list can be open at a time for adding/removing tasks.
-- CSV files are saved in the current directory.
+*Feel free to open issues or suggestions for v2!*
