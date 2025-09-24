@@ -29,18 +29,7 @@ if __name__ != "__main__" :
                     print(f"Task '{title}' removed successfully.")
                     return
             print(f"Error: Task with title '{title}' not found")
-    
-        def show_list(self):
-            if not self.my_list:
-                print(f"The to-do list '{self.list_name}' is empty.")
-            else:
-                print(f"\nTo-Do List: {self.list_name}")
-                print("-" * 30)
-                self.my_list.sort(key=lambda i: i.send_priority(), reverse=True)
-                for i, t in enumerate(self.my_list, 1):
-                    print(f"Task {i}:")
-                    t.show_task()
-                    print("-" * 30)
+   
     
         def show_titel(self):
             if not self.my_list:
