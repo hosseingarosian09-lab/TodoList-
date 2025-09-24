@@ -6,15 +6,13 @@ if __name__ != "__main__" :
             self.title = title
             self.description = description
             self.priority = int(priority)
-    
-        def show_task(self):
-            print(f"Title: {self.title}\nDescription: {self.description}\nPriority: {self.priority}")
-        
-        def print_title(self):
-            print(self.title)
 
         def send_priority(self):
             return self.priority
+        def send_title(self):
+            return self.title
+        def send_description(self):
+            return self.title
 
     class todolist:
         def __init__(self, name):
