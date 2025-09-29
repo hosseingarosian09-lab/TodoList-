@@ -1,56 +1,58 @@
 # To-Do List CLI Application (v2 in Progress 🚧)
 
-A simple command-line To-Do List manager in Python that supports multiple lists, task priorities, and CSV import/export.
+A simple command-line To-Do List manager in Python supporting multiple lists, task priorities, and CSV import/export. Currently on v1, with v2 in progress.
+Features (v1)
 
----
+Create and manage multiple to-do lists
+Add, remove, and view tasks with title, description, and priority (1-5)
+Save and load lists as CSV files
+Interactive menu-driven interface
 
-## 🚀 Version 2 In Progress
+Upcoming (v2)
 
-**This repository is currently being updated for version 2!**  
-New features, improvements, and refactoring are underway. Stay tuned for updates.
+Multi-list management (open/edit multiple lists simultaneously)
+a UI using tkinter library
 
----
+Requirements
 
-## Features (v1)
+Python 3.6+
+Install via: pip install -r requirements.txt (create with csv if needed)
 
-- Create and manage multiple to-do lists
-- Add, remove, and view tasks with title, description, and priority (1-5)
-- Save and load lists as CSV files
-- Lists and tasks are managed interactively via a menu
+Usage
 
-## Planned for v2
+Run: python main.py
+Menu Options:
+1: Create a new to-do list
+2: Open an existing to-do list
+3: Add a task to the open list
+4: Remove a task from the open list
+5: Delete a to-do list
+6: View tasks in a list
+7: Save a list to a CSV file
+8: Load a list from a CSV file
+0: Exit
 
-- Improved user interface and experience
-- **Graphical User Interface (UI) coming soon!**
-- More flexible task management
 
-## Usage
 
-1. **Run the application:**
-   ```sh
-   python main.py
-   ```
+File Structure
 
-2. **Menu Options:**
-   - `1`: Create a new to-do list
-   - `2`: Open an existing to-do list
-   - `3`: Add a task to the open list
-   - `4`: Remove a task from the open list
-   - `5`: Delete a to-do list
-   - `6`: View tasks in a list
-   - `7`: Save a list to a CSV file
-   - `8`: Load a list from a CSV file
-   - `0`: Exit the application
+main.py — Main CLI interface
+todolist.py — todolist and task classes
 
-## File Structure
+Notes
 
-- `main.py` — Main CLI interface for the to-do list manager
-- `todolist.py` — Contains the `todolist` and `task` classes for managing lists and tasks
+v1 limitation: Only one list open at a time for edits.
+CSV files save to the current directory.
 
-## Requirements
+Getting Started
+Clone this repo, install requirements, and run main.py. Example output:  
+To-Do List: Work
+------------------------------
+Task 1:
+Title: Meeting
+Description: Team sync
+Priority: 3
+------------------------------
 
-- Python 3.x
-
----
-
-*Feel free to open issues or suggestions for v2!*
+About
+First project by Hossein Garossian. v2 in development—suggestions appreciated!
