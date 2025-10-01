@@ -21,7 +21,7 @@ if __name__ != "__main__" :
     
         def add_task(self, title, description, priority):
             self.my_list.append(task(title, description, priority))
-    
+
         def remove_task(self, title):
             for t in self.my_list[:]:
                 if t.title == title:
@@ -29,16 +29,10 @@ if __name__ != "__main__" :
                     print(f"Task '{title}' removed successfully.")
                     return
             print(f"Error: Task with title '{title}' not found")
-   
-    
+
         def show_titel(self):
-            if not self.my_list:
-                print(f"The to-do list '{self.list_name}' is empty.")
-                return False
-            else:
-                for i, t in enumerate(self.my_list, 1):
-                    print(f"{i}. {t.title}")
-                return True
+            for i, t in enumerate(self.my_list, 1):
+                return(f"{i}. {t.title}")
 
         def get_priority(self, title):
             for t in self.my_list:
