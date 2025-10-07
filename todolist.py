@@ -12,7 +12,7 @@ if __name__ != "__main__" :
         def send_title(self):
             return self.title
         def send_description(self):
-            return self.title
+            return self.description 
 
     class todolist:
         def __init__(self, name):
@@ -30,7 +30,6 @@ if __name__ != "__main__" :
                     return
             print(f"Error: Task with title '{title}' not found")
    
-    
         def show_titel(self):
             if not self.my_list:
                 print(f"The to-do list '{self.list_name}' is empty.")
