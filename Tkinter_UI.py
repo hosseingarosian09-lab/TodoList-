@@ -1,10 +1,11 @@
 from tkinter import *
+from tkinter import messagebox
+from todolist import todolist, task
 
-#main fraim
+# Main window
 window = Tk()
-window.title("todo list")
+window.title("To-Do List")
 window.geometry("800x600")
-
 
 # Configure grid weights 
 window.grid_columnconfigure(0, weight=1)  
@@ -12,31 +13,89 @@ window.grid_columnconfigure(1, weight=2)
 window.grid_rowconfigure(0, weight=1)    
 window.grid_rowconfigure(1, weight=0, minsize=50)
 
-# 3 main frams 
+# 3 main frames 
 todolistbox = Listbox(window)
-todolistbox.config(width=20,height=20,bg="gray",border=2,relief="groove")
+todolistbox.config(width=20, height=20, bg="gray", border=2, relief="groove")
 todolistbox.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
 
 tasks_frame = Frame(window)
-tasks_frame.config(height=30,width=600,)
+tasks_frame.config(height=30, width=600)
 tasks_frame.grid(row=0, column=1, rowspan=2, sticky="nsew", padx=5, pady=5)
 
 button_frame = Frame(window)
-button_frame.config(height=50,width=20,bg="black")
+button_frame.config(height=50, width=20, bg="black")
 button_frame.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
 
-
-#list of to do list 
+# List of to-do lists 
 todolist_list = []
 
+# Function to create pop-up for adding a task
+def add_task_popup():
+    # Check if a to-do list is selected
+    if not todolistbox.curselection():
+        messagebox.showwarning("No List Selected", "Please select a to-do list from the listbox.")
+        return
+    
+    # select a to-do list
+    selected_index = todolistbox.curselection()[0]
+    selected_list = todolist_list[selected_index]
 
 
-#buttons 
-addtask_button = Button(button_frame,text="add task")
-addtask_button.pack(side="left",fill="both")
+    popup = Toplevel(window)
+    popup.title("Add Task")
+    popup.geometry("400x300")
+    popup.transient(window)  # Make popup modal
+    popup.grab_set()  # Lock focus to popup
 
-removetask_button = Button(button_frame,text="remove task")
-removetask_button.pack(side="right",fill="both")
+    popup.grid_columnconfigure(0, weight=1)
+    popup.grid_columnconfigure(1, weight=3)
+    for i in range(5):
+        popup.grid_rowconfigure(i, weight=1)
 
+    # Labels and entry fields
+    Label(popup, text="Title:").grid(row=0, column=0, padx=5, pady=5, sticky="e")
+    title_entry = Entry(popup)
+    title_entry.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
+
+    Label(popup, text="Description:").grid(row=1, column=0, padx=5, pady=5, sticky="e")
+    desc_entry = Text(popup, height=4, width=30)
+    desc_entry.grid(row=1, column=1, padx=5, pady=5, sticky="ew")
+
+    Label(popup, text="Priority (1-5):").grid(row=2, column=0, padx=5, pady=5, sticky="e")
+    priority_entry = Entry(popup)
+    priority_entry.grid(row=2, column=1, padx=5, pady=5, sticky="ew")
+
+    # Function to submit task addition
+    def submit_task():
+        title = title_entry.get().strip()
+        description = desc_entry.get("1.0", END).strip()
+        priority = priority_entry.get().strip()
+
+        if not title or not description:
+            messagebox.showerror("Input Error", "Title and Description cannot be empty.")
+            return
+        try:
+            priority = int(priority)
+            if not 1 <= priority <= 5:
+                raise ValueError
+        except ValueError:
+            messagebox.showerror("Input Error", "Priority must be a number between 1 and 5.")
+            return
+
+        # Add task to the selected to-do list
+        selected_list.add_task(title, description, priority)
+        messagebox.showinfo("Success", f"Task '{title}' added to '{selected_list.list_name}'.")
+        popup.destroy()
+
+    # Submit and Cancel buttons
+    Button(popup, text="Add Task", command=submit_task).grid(row=3, column=0, columnspan=2, pady=10)
+    Button(popup, text="Cancel", command=popup.destroy).grid(row=4, column=0, columnspan=2, pady=5)
+
+# Buttons 
+addtask_button = Button(button_frame, text="Add Task", command=add_task_popup)
+addtask_button.pack(side="left", fill="both")
+
+removetask_button = Button(button_frame, text="Remove Task")
+removetask_button.pack(side="right", fill="both")
 
 window.mainloop()
