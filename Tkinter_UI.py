@@ -93,9 +93,15 @@ def add_task_popup():
 
 # Buttons 
 addtask_button = Button(button_frame, text="Add Task", command=add_task_popup)
-addtask_button.pack(side="left", fill="both")
+addtask_button.pack(fill="x")
+
+addlist_button = Button(button_frame, text="Add todo-list",)
+addlist_button.pack(fill="x")
 
 removetask_button = Button(button_frame, text="Remove Task")
-removetask_button.pack(side="right", fill="both")
+removetask_button.pack(fill="x")
+
+delete_list_button = Button(button_frame, text="delet list")
+delete_list_button.pack(fill="x")
 
 window.mainloop()
