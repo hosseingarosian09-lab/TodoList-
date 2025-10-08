@@ -90,12 +90,53 @@ def add_task_popup():
     # Submit and Cancel buttons
     Button(popup, text="Add Task", command=submit_task).grid(row=3, column=0, columnspan=2, pady=10)
     Button(popup, text="Cancel", command=popup.destroy).grid(row=4, column=0, columnspan=2, pady=5)
+ 
+# Function to add to-do list
+def add_todolist_popup():
+    popup = Toplevel(window)
+    popup.title("Add To-Do List")
+    popup.geometry("300x150")
+    popup.transient(window) 
+    popup.grab_set()  
+
+    popup.grid_columnconfigure(0, weight=1)
+    popup.grid_columnconfigure(1, weight=3)
+    popup.grid_rowconfigure(0, weight=1)
+    popup.grid_rowconfigure(1, weight=1)
+    popup.grid_rowconfigure(2, weight=1)
+
+
+    Label(popup, text="List Name:").grid(row=0, column=0, padx=5, pady=5, sticky="e")
+    name_entry = Entry(popup)
+    name_entry.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
+
+
+    def submit_todolist():
+        name = name_entry.get().strip()
+        if not name:
+            messagebox.showerror("Input Error", "List name cannot be empty.")
+            return
+        # Check for duplicate names
+        if any(todo.list_name == name for todo in todolist_list):
+            messagebox.showerror("Input Error", f"A list named '{name}' already exists.")
+            return
+
+        # Create new to-do list and add to todolist_list
+        new_list = todolist(name)
+        todolist_list.append(new_list)
+        todolistbox.insert(END, name)
+        messagebox.showinfo("Success", f"To-Do List '{name}' created.")
+        popup.destroy()
+
+    # Submit and Cancel buttons
+    Button(popup, text="Add List", command=submit_todolist).grid(row=1, column=0, columnspan=2, pady=5)
+    Button(popup, text="Cancel", command=popup.destroy).grid(row=2, column=0, columnspan=2, pady=5)
 
 # Buttons 
 addtask_button = Button(button_frame, text="Add Task", command=add_task_popup)
 addtask_button.pack(fill="x")
 
-addlist_button = Button(button_frame, text="Add todo-list",)
+addlist_button = Button(button_frame, text="Add todo-list",command=add_todolist_popup)
 addlist_button.pack(fill="x")
 
 removetask_button = Button(button_frame, text="Remove Task")
