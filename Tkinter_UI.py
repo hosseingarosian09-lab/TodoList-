@@ -39,6 +39,49 @@ button_frame.grid(row=1, column=0, sticky="nsew", padx=5, pady=5)
 todolist_list = []
 task_checkboxes = []  # Store checkbox variables for tasks
 
+# Function to update task display in tasks_frame
+def update_task_display():
+    # Clear existing widgets
+    for widget in tasks_inner_frame.winfo_children():
+        widget.destroy()
+    task_checkboxes.clear()
+
+    # Check if a to-do list is selected
+    if not todolistbox.curselection():
+        return
+    
+    # Select a to-do list
+    selected_index = todolistbox.curselection()[0]
+    selected_list = todolist_list[selected_index]
+
+    # Display tasks
+    for i, task in enumerate(selected_list.my_list):
+        # Frame for each task
+        task_frame = Frame(tasks_inner_frame, bg="white")
+        task_frame.grid(row=i, column=0, sticky="w", padx=5, pady=2)
+
+        # Checkbox for completion status
+        var = IntVar(value=1 if task.completed else 0)
+        task_checkboxes.append(var)
+        Checkbutton(task_frame, variable=var, command=lambda t=task, v=var: toggle_task_completion(t, v), bg="white").pack(side=LEFT)
+
+        # Task details
+        status = "✔" if task.completed else " "
+        task_text = f"{task.title} [Priority: {task.priority}] [{status}]\n{task.description}"
+        Label(task_frame, text=task_text, bg="white", justify=LEFT, wraplength=400).pack(side=LEFT)
+
+# Function to toggle task completion
+def toggle_task_completion(task, var):
+    task.toggle_complete()
+    update_task_display()
+
+# Function to handle listbox selection
+def on_list_select(event):
+    update_task_display()
+
+# Bind selection event to todolistbox
+todolistbox.bind("<<ListboxSelect>>", on_list_select)
+
 # Function to create pop-up for adding a task
 def add_task_popup():
     if not todolistbox.curselection():
@@ -89,6 +132,7 @@ def add_task_popup():
 
         selected_list.add_task(title, description, priority)
         messagebox.showinfo("Success", f"Task '{title}' added to '{selected_list.list_name}'.")
+        update_task_display()
         popup.destroy()
 
     Button(popup, text="Add Task", command=submit_task).grid(row=3, column=0, columnspan=2, pady=10)
@@ -156,6 +200,7 @@ def delete_list_popup():
     def submit_delete_list():
         todolist_list.pop(selected_index)
         todolistbox.delete(selected_index)
+        update_task_display()
         messagebox.showinfo("Success", f"To-Do List '{selected_list.list_name}' deleted.")
         popup.destroy()
 
@@ -169,7 +214,7 @@ addtask_button.pack(fill="x")
 addlist_button = Button(button_frame, text="Add Todo-List", command=add_todolist_popup)
 addlist_button.pack(fill="x")
 
-removetask_button = Button(button_frame, text="Remove Task", )
+removetask_button = Button(button_frame, text="Remove Task")
 removetask_button.pack(fill="x")
 
 delete_list_button = Button(button_frame, text="Delete List", command=delete_list_popup)
