@@ -174,6 +174,48 @@ def add_todolist_popup():
     Button(popup, text="Add List", command=submit_todolist).grid(row=1, column=0, columnspan=2, pady=5)
     Button(popup, text="Cancel", command=popup.destroy).grid(row=2, column=0, columnspan=2, pady=5)
 
+# Function to create pop-up for removing a task
+def remove_task_popup():
+    if not todolistbox.curselection():
+        messagebox.showwarning("No List Selected", "Please select a to-do list from the listbox.")
+        return
+    
+    selected_index = todolistbox.curselection()[0]
+    selected_list = todolist_list[selected_index]
+
+    if not selected_list.my_list:
+        messagebox.showwarning("No Tasks", f"The to-do list '{selected_list.list_name}' is empty.")
+        return
+
+    popup = Toplevel(window)
+    popup.title("Remove Task")
+    popup.geometry("300x300")
+    popup.transient(window)
+    popup.grab_set()
+
+    popup.grid_columnconfigure(0, weight=1)
+    popup.grid_rowconfigure(0, weight=3)
+    popup.grid_rowconfigure(1, weight=1)
+    popup.grid_rowconfigure(2, weight=1)
+
+    task_listbox = Listbox(popup)
+    task_listbox.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
+    for task in selected_list.my_list:
+        task_listbox.insert(END, task.title)
+
+    def submit_remove_task():
+        if not task_listbox.curselection():
+            messagebox.showwarning("No Task Selected", "Please select a task to remove.")
+            return
+        selected_task_index = task_listbox.curselection()[0]
+        task_title = task_listbox.get(selected_task_index)
+        selected_list.remove_task(task_title)
+        messagebox.showinfo("Success", f"Task '{task_title}' removed from '{selected_list.list_name}'.")
+        update_task_display()
+        popup.destroy()
+
+    Button(popup, text="Remove Task", command=submit_remove_task).grid(row=1, column=0, pady=5)
+    Button(popup, text="Cancel", command=popup.destroy).grid(row=2, column=0, pady=5)
 
 # Function to create pop-up for deleting a to-do list
 def delete_list_popup():
@@ -214,7 +256,7 @@ addtask_button.pack(fill="x")
 addlist_button = Button(button_frame, text="Add Todo-List", command=add_todolist_popup)
 addlist_button.pack(fill="x")
 
-removetask_button = Button(button_frame, text="Remove Task")
+removetask_button = Button(button_frame, text="Remove Task",command=remove_task_popup)
 removetask_button.pack(fill="x")
 
 delete_list_button = Button(button_frame, text="Delete List", command=delete_list_popup)
