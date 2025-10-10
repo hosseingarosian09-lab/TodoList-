@@ -54,8 +54,11 @@ def update_task_display():
     selected_index = todolistbox.curselection()[0]
     selected_list = todolist_list[selected_index]
 
+    
+    sorted_tasks = sorted(selected_list.my_list, key=lambda t: t.priority, reverse=True)
+
     # Display tasks
-    for i, task in enumerate(selected_list.my_list):
+    for i, task in enumerate(sorted_tasks):
         # Frame for each task
         task_frame = Frame(tasks_inner_frame, bg="white")
         task_frame.grid(row=i, column=0, sticky="w", padx=5, pady=2)
@@ -256,7 +259,7 @@ addtask_button.pack(fill="x")
 addlist_button = Button(button_frame, text="Add Todo-List", command=add_todolist_popup)
 addlist_button.pack(fill="x")
 
-removetask_button = Button(button_frame, text="Remove Task",command=remove_task_popup)
+removetask_button = Button(button_frame, text="Remove Task", command=remove_task_popup)
 removetask_button.pack(fill="x")
 
 delete_list_button = Button(button_frame, text="Delete List", command=delete_list_popup)
