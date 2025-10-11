@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox, font
 from todolist import todolist, task
+import os
 
 # Main window
 window = Tk()
@@ -326,26 +327,46 @@ def save_csv_popup():
 def load_csv_popup():
     popup = Toplevel(window)
     popup.title("Load from CSV")
-    popup.geometry("300x150")
+    popup.geometry("300x300")
     popup.config(bg="#f0f0f0")
     popup.transient(window)
     popup.grab_set()
 
     popup.grid_columnconfigure(0, weight=1)
-    popup.grid_columnconfigure(1, weight=3)
-    popup.grid_rowconfigure(0, weight=1)
+    popup.grid_rowconfigure(0, weight=3)
     popup.grid_rowconfigure(1, weight=1)
     popup.grid_rowconfigure(2, weight=1)
 
-    Label(popup, text="Filename:", bg="#f0f0f0", font=default_font).grid(row=0, column=0, padx=10, pady=10, sticky="e")
-    filename_entry = Entry(popup, font=default_font)
-    filename_entry.grid(row=0, column=1, padx=10, pady=10, sticky="ew")
+    # Frame for Listbox and Scrollbar
+    listbox_frame = Frame(popup, bg="#f0f0f0")
+    listbox_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+    listbox_frame.grid_columnconfigure(0, weight=1)
+    listbox_frame.grid_rowconfigure(0, weight=1)
+
+    # Listbox for CSV files
+    csv_listbox = Listbox(listbox_frame, bg="white", fg="black", selectbackground="#4CAF50", selectforeground="white", font=default_font)
+    csv_listbox.grid(row=0, column=0, sticky="nsew")
+    
+    # Scrollbar for Listbox
+    scrollbar = Scrollbar(listbox_frame, orient=VERTICAL, command=csv_listbox.yview)
+    scrollbar.grid(row=0, column=1, sticky="ns")
+    csv_listbox.configure(yscrollcommand=scrollbar.set)
+
+    # Populate Listbox with .csv files
+    csv_files = [f for f in os.listdir() if f.endswith('.csv')]
+    if not csv_files:
+        csv_listbox.insert(END, "No .csv files found")
+        csv_listbox.config(state=DISABLED)
+    else:
+        for file in csv_files:
+            csv_listbox.insert(END, file)
 
     def submit_load_csv():
-        filename = filename_entry.get().strip()
-        if not filename:
-            messagebox.showerror("Input Error", "Filename cannot be empty.")
+        if not csv_files or not csv_listbox.curselection():
+            messagebox.showerror("Input Error", "No .csv file selected.")
             return
+        selected_file_index = csv_listbox.curselection()[0]
+        filename = csv_listbox.get(selected_file_index)
         # Use filename (minus .csv) as list name
         list_name = filename.replace('.csv', '') if filename.endswith('.csv') else filename
         if any(todo.list_name == list_name for todo in todolist_list):
@@ -360,9 +381,8 @@ def load_csv_popup():
         else:
             messagebox.showerror("Error", f"Failed to load '{filename}'.")
 
-    Button(popup, text="Load", command=submit_load_csv, bg="#4CAF50", fg="white", font=default_font).grid(row=1, column=0, columnspan=2, pady=5, padx=10, sticky="ew")
-    Button(popup, text="Cancel", command=popup.destroy, bg="#ddd", fg="black", font=default_font).grid(row=2, column=0, columnspan=2, pady=5, padx=10, sticky="ew")
-
+    Button(popup, text="Load", command=submit_load_csv, bg="#4CAF50", fg="white", font=default_font).grid(row=1, column=0, pady=5, padx=10, sticky="ew")
+    Button(popup, text="Cancel", command=popup.destroy, bg="#ddd", fg="black", font=default_font).grid(row=2, column=0, pady=5, padx=10, sticky="ew")
 
 # Buttons 
 addtask_button = Button(button_frame, text="Add Task", command=add_task_popup, bg="#4CAF50", fg="white", font=default_font)
