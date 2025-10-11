@@ -1,42 +1,42 @@
-# To-Do List CLI Application (v2 in Progress 🚧)
+# To-Do List Application (v2 GUI)
 
-A simple command-line To-Do List manager in Python supporting multiple lists, task priorities, and CSV import/export. Currently on v1, with v2 in progress.
+A to-do list manager with a Tkinter GUI, built to learn GUI development after a CLI v1. Supports multiple lists, task priorities, completion toggles, and CSV import/export.
 
-## Features (v1)
-- Create and manage multiple to-do lists
-- Add, remove, and view tasks with title, description, and priority (1-5)
-- Save and load lists as CSV files
-- Interactive menu-driven interface
+## Features
+- GUI with listbox for selecting to-do lists
+- Scrollable task display: sorted by priority (1-5, color-coded), checkboxes for completion, task details
+- Popups for adding/removing tasks/lists, saving/loading CSV files
+- Tasks include title, description, priority, and completion status
 
-## Upcoming (v2)
-- Multi-list management (open/edit multiple lists simultaneously)
-- a simple UI with tkinter library 
+## Screenshot
+![To-Do List Screenshot](ScreenshotTODOLIST.png) 
 
 ## Requirements
 - Python 3.6+
+- Tkinter (pre-installed with most Python distributions; install via `pip install tk` if needed)
 
 ## Usage
-1. Run: `python main.py`
-2. Menu Options:
-   - `1`: Create a new to-do list
-   - `2`: Open an existing to-do list
-   - `3`: Add a task to the open list
-   - `4`: Remove a task from the open list
-   - `5`: Delete a to-do list
-   - `6`: View tasks in a list
-   - `7`: Save a list to a CSV file
-   - `8`: Load a list from a CSV file
-   - `0`: Exit
+1. Clone this repository:
+   ```sh
+   git clone https://github.com/hosseingarosian09-lab/TodoList-.git
+   cd TodoList-
+   ```
+2. Run the application:
+   ```sh
+   python Tkinter_UI.py
+   ```
+3. Use buttons to manage lists and tasks via popups.
 
 ## File Structure
-- `main.py` — Main CLI interface
+- `Tkinter_UI.py` — Main GUI interface
 - `todolist.py` — `todolist` and `task` classes
 
 ## Notes
-- v1 limitation: Only one list open at a time for edits.
-- CSV files save to the current directory.
+- Limitation: Only one list can be focused at a time for task edits.
+- CSV files are saved/loaded in the current directory.
 
 ## Getting Started
-Clone this repo, install requirements, and run `main.py`.
+Clone the repo, ensure Tkinter is installed, and run `Tkinter_UI.py`. Example: Create a list, add a task ("Meeting", "Team sync", Priority 3), toggle completion, save to CSV.
 
-First project by Hossein Garossian. v2 in development—suggestions appreciated!
+## About
+First project by Hossein Garossian. Feedback on GUI or features welcome!
