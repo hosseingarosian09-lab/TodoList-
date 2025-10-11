@@ -38,7 +38,7 @@ if __name__ != "__main__" :
         def show_titel(self):
             if not self.my_list:
                 return f"The to-do list '{self.list_name}' is empty."
-            return "\n".join(f"{i}. {t.title} [{'✔' if t.completed else ' '}]" for i, t in enumerate(self.my_list, 1))
+            return "\n".join(f"{i}. {t.title} [{'✔' if t.completed else ' '}] (Priority: {t.priority})" for i, t in enumerate(self.my_list, 1))
         
         def get_priority(self, title):
             for t in self.my_list:
@@ -64,15 +64,31 @@ if __name__ != "__main__" :
             try:
                 if not filename.endswith('.csv'):
                     filename += '.csv'
-                self.my_list = []  
+                self.my_list = []
                 with open(filename, 'r', newline='', encoding='utf-8') as file:
                     reader = csv.DictReader(file)
+                    expected_headers = ['Title', 'Description', 'Priority']
+                    if not all(header in reader.fieldnames for header in expected_headers):
+                        raise ValueError("CSV file is missing required headers: Title, Description, Priority")
                     for row in reader:
+                        if not row['Title'].strip() or not row['Description'].strip():
+                            print(f"Skipping invalid task: Title or Description is empty in row {row}")
+                            continue
+                        try:
+                            priority = int(row['Priority'])
+                            if not 1 <= priority <= 5:
+                                raise ValueError
+                        except ValueError:
+                            print(f"Skipping invalid task: Priority '{row['Priority']}' is not a valid integer (1-5) in row {row}")
+                            continue
                         completed = row.get('Completed', 'False').lower() == 'true'
-                        new_task = task(row['Title'], row['Description'], int(row['Priority']), completed)
+                        new_task = task(row['Title'], row['Description'], priority, completed)
                         self.my_list.append(new_task)
                 print(f"Tasks loaded from {filename} successfully.")
                 return True
+            except FileNotFoundError:
+                print(f"Error: File '{filename}' not found")
+                return False
             except Exception as e:
                 print(f"Error loading CSV: {e}")
                 return False
