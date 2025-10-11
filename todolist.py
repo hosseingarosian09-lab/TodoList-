@@ -1,6 +1,7 @@
 import csv
 
-if __name__ != "__main__" : 
+# Prevent direct execution of this module; it should be imported
+if __name__ != "__main__":
     class task:
         def __init__(self, title, description, priority, completed=False):
             self.title = title
@@ -35,7 +36,7 @@ if __name__ != "__main__" :
                     return
             print(f"Error: Task with title '{title}' not found")
    
-        def show_titel(self):
+        def show_title(self):
             if not self.my_list:
                 return f"The to-do list '{self.list_name}' is empty."
             return "\n".join(f"{i}. {t.title} [{'✔' if t.completed else ' '}] (Priority: {t.priority})" for i, t in enumerate(self.my_list, 1))
@@ -92,5 +93,5 @@ if __name__ != "__main__" :
             except Exception as e:
                 print(f"Error loading CSV: {e}")
                 return False
-else :
-    print("open the main file")
+else:
+    print("This module should be imported, not run directly.")

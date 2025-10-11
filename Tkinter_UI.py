@@ -49,7 +49,7 @@ tasks_inner_frame.bind("<Configure>", lambda e: tasks_canvas.configure(scrollreg
 button_frame = Frame(window, bg="#ddd")
 button_frame.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
 
-# List of to-do lists 
+# List of to-do list objects
 todolist_list = []
 task_checkboxes = []
 
@@ -160,7 +160,7 @@ def add_task_popup():
             return
 
         selected_list.add_task(title, description, priority)
-        messagebox.showinfo("Success", f"Task '{title}' added to '{selected_list.list_name}'.")
+        messagebox.showinfo("Success", f"Task '{title}' added to to-do list '{selected_list.list_name}'.")
         update_task_display()
         popup.destroy()
 
@@ -192,7 +192,7 @@ def add_todolist_popup():
             messagebox.showerror("Input Error", "List name cannot be empty.")
             return
         if any(todo.list_name == name for todo in todolist_list):
-            messagebox.showerror("Input Error", f"A list named '{name}' already exists.")
+            messagebox.showerror("Input Error", f"A to-do list named '{name}' already exists.")
             return
 
         new_list = todolist(name)
@@ -241,7 +241,7 @@ def remove_task_popup():
         selected_task_index = task_listbox.curselection()[0]
         task_title = task_listbox.get(selected_task_index)
         selected_list.remove_task(task_title)
-        messagebox.showinfo("Success", f"Task '{task_title}' removed from '{selected_list.list_name}'.")
+        messagebox.showinfo("Success", f"Task '{task_title}' removed from to-do list '{selected_list.list_name}'.")
         update_task_display()
         popup.destroy()
 
@@ -269,7 +269,7 @@ def delete_list_popup():
     popup.grid_rowconfigure(1, weight=1)
     popup.grid_rowconfigure(2, weight=1)
 
-    Label(popup, text=f"Are you sure you want to delete '{selected_list.list_name}'?", bg="#f0f0f0", font=default_font).grid(row=0, column=0, padx=10, pady=10)
+    Label(popup, text=f"Are you sure you want to delete to-do list '{selected_list.list_name}'?", bg="#f0f0f0", font=default_font).grid(row=0, column=0, padx=10, pady=10)
 
     def submit_delete_list():
         todolist_list.pop(selected_index)
@@ -317,7 +317,7 @@ def save_csv_popup():
             messagebox.showinfo("Success", f"To-Do List '{selected_list.list_name}' saved to '{filename}'.")
             popup.destroy()
         else:
-            messagebox.showerror("Error", f"Failed to save '{selected_list.list_name}' to '{filename}'.")
+            messagebox.showerror("Error", f"Failed to save to-do list '{selected_list.list_name}' to '{filename}'.")
 
     Button(popup, text="Save", command=submit_save_csv, bg="#4CAF50", fg="white", font=default_font).grid(row=1, column=0, columnspan=2, pady=5, padx=10, sticky="ew")
     Button(popup, text="Cancel", command=popup.destroy, bg="#ddd", fg="black", font=default_font).grid(row=2, column=0, columnspan=2, pady=5, padx=10, sticky="ew")
@@ -370,7 +370,7 @@ def load_csv_popup():
         # Use filename (minus .csv) as list name
         list_name = filename.replace('.csv', '') if filename.endswith('.csv') else filename
         if any(todo.list_name == list_name for todo in todolist_list):
-            messagebox.showerror("Input Error", f"A list named '{list_name}' already exists.")
+            messagebox.showerror("Input Error", f"A to-do list named '{list_name}' already exists.")
             return
         new_list = todolist(list_name)
         if new_list.loadCSV(filename):
@@ -379,7 +379,7 @@ def load_csv_popup():
             messagebox.showinfo("Success", f"To-Do List '{list_name}' loaded from '{filename}'.")
             popup.destroy()
         else:
-            messagebox.showerror("Error", f"Failed to load '{filename}'.")
+            messagebox.showerror("Error", f"Failed to load to-do list from '{filename}'.")
 
     Button(popup, text="Load", command=submit_load_csv, bg="#4CAF50", fg="white", font=default_font).grid(row=1, column=0, pady=5, padx=10, sticky="ew")
     Button(popup, text="Cancel", command=popup.destroy, bg="#ddd", fg="black", font=default_font).grid(row=2, column=0, pady=5, padx=10, sticky="ew")
@@ -388,7 +388,7 @@ def load_csv_popup():
 addtask_button = Button(button_frame, text="Add Task", command=add_task_popup, bg="#4CAF50", fg="white", font=default_font)
 addtask_button.pack(fill="x", pady=2)
 
-addlist_button = Button(button_frame, text="Add Todo-List", command=add_todolist_popup, bg="#4CAF50", fg="white", font=default_font)
+addlist_button = Button(button_frame, text="Add To-Do List", command=add_todolist_popup, bg="#4CAF50", fg="white", font=default_font)
 addlist_button.pack(fill="x", pady=2)
 
 removetask_button = Button(button_frame, text="Remove Task", command=remove_task_popup, bg="#f44336", fg="white", font=default_font)
@@ -400,7 +400,7 @@ delete_list_button.pack(fill="x", pady=2)
 save_csv_button = Button(button_frame, text="Save list", command=save_csv_popup, bg="#2196F3", fg="white", font=default_font)
 save_csv_button.pack(fill="x", pady=2)
 
-load_csv_button = Button(button_frame, text="Load lsit", command=load_csv_popup, bg="#2196F3", fg="white", font=default_font)
+load_csv_button = Button(button_frame, text="Load list", command=load_csv_popup, bg="#2196F3", fg="white", font=default_font)
 load_csv_button.pack(fill="x", pady=2)
 
 window.mainloop()
