@@ -322,6 +322,48 @@ def save_csv_popup():
     Button(popup, text="Cancel", command=popup.destroy, bg="#ddd", fg="black", font=default_font).grid(row=2, column=0, columnspan=2, pady=5, padx=10, sticky="ew")
 
 
+# Function to create pop-up for loading from CSV
+def load_csv_popup():
+    popup = Toplevel(window)
+    popup.title("Load from CSV")
+    popup.geometry("300x150")
+    popup.config(bg="#f0f0f0")
+    popup.transient(window)
+    popup.grab_set()
+
+    popup.grid_columnconfigure(0, weight=1)
+    popup.grid_columnconfigure(1, weight=3)
+    popup.grid_rowconfigure(0, weight=1)
+    popup.grid_rowconfigure(1, weight=1)
+    popup.grid_rowconfigure(2, weight=1)
+
+    Label(popup, text="Filename:", bg="#f0f0f0", font=default_font).grid(row=0, column=0, padx=10, pady=10, sticky="e")
+    filename_entry = Entry(popup, font=default_font)
+    filename_entry.grid(row=0, column=1, padx=10, pady=10, sticky="ew")
+
+    def submit_load_csv():
+        filename = filename_entry.get().strip()
+        if not filename:
+            messagebox.showerror("Input Error", "Filename cannot be empty.")
+            return
+        # Use filename (minus .csv) as list name
+        list_name = filename.replace('.csv', '') if filename.endswith('.csv') else filename
+        if any(todo.list_name == list_name for todo in todolist_list):
+            messagebox.showerror("Input Error", f"A list named '{list_name}' already exists.")
+            return
+        new_list = todolist(list_name)
+        if new_list.loadCSV(filename):
+            todolist_list.append(new_list)
+            todolistbox.insert(END, list_name)
+            messagebox.showinfo("Success", f"To-Do List '{list_name}' loaded from '{filename}'.")
+            popup.destroy()
+        else:
+            messagebox.showerror("Error", f"Failed to load '{filename}'.")
+
+    Button(popup, text="Load", command=submit_load_csv, bg="#4CAF50", fg="white", font=default_font).grid(row=1, column=0, columnspan=2, pady=5, padx=10, sticky="ew")
+    Button(popup, text="Cancel", command=popup.destroy, bg="#ddd", fg="black", font=default_font).grid(row=2, column=0, columnspan=2, pady=5, padx=10, sticky="ew")
+
+
 # Buttons 
 addtask_button = Button(button_frame, text="Add Task", command=add_task_popup, bg="#4CAF50", fg="white", font=default_font)
 addtask_button.pack(fill="x", pady=2)
@@ -338,5 +380,7 @@ delete_list_button.pack(fill="x", pady=2)
 save_csv_button = Button(button_frame, text="Save list", command=save_csv_popup, bg="#2196F3", fg="white", font=default_font)
 save_csv_button.pack(fill="x", pady=2)
 
+load_csv_button = Button(button_frame, text="Load lsit", command=load_csv_popup, bg="#2196F3", fg="white", font=default_font)
+load_csv_button.pack(fill="x", pady=2)
 
 window.mainloop()
