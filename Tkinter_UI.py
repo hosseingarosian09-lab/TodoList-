@@ -6,12 +6,14 @@ from todolist import todolist, task
 window = Tk()
 window.title("To-Do List")
 window.geometry("800x600")
-window.config(bg="#f0f0f0")  # Light gray background for main window
+window.config(bg="#f0f0f0")
+
 
 default_font = font.nametofont("TkDefaultFont")
 default_font.configure(family="Arial", size=10)
 title_font = ("Arial", 12, "bold")
 overstrike_font = ("Arial", 10, "overstrike")
+
 
 priority_colors = {
     5: "red",
@@ -25,7 +27,7 @@ priority_colors = {
 window.grid_columnconfigure(0, weight=1)  
 window.grid_columnconfigure(1, weight=2)  
 window.grid_rowconfigure(0, weight=1)    
-window.grid_rowconfigure(1, weight=0, minsize=50)
+window.grid_rowconfigure(1, weight=0, minsize=100)
 
 # 3 main frames 
 todolistbox = Listbox(window, bg="white", fg="black", selectbackground="#4CAF50", selectforeground="white", font=default_font)
@@ -43,7 +45,7 @@ tasks_inner_frame = Frame(tasks_canvas, bg="white")
 tasks_canvas.create_window((0, 0), window=tasks_inner_frame, anchor="nw")
 tasks_inner_frame.bind("<Configure>", lambda e: tasks_canvas.configure(scrollregion=tasks_canvas.bbox("all")))
 
-button_frame = Frame(window, bg="#ddd")  # Lighter gray for button frame
+button_frame = Frame(window, bg="#ddd")
 button_frame.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
 
 # List of to-do lists 
@@ -278,6 +280,48 @@ def delete_list_popup():
     Button(popup, text="Delete List", command=submit_delete_list, bg="#f44336", fg="white", font=default_font).grid(row=1, column=0, pady=5, padx=10, sticky="ew")
     Button(popup, text="Cancel", command=popup.destroy, bg="#ddd", fg="black", font=default_font).grid(row=2, column=0, pady=5, padx=10, sticky="ew")
 
+# Function to create pop-up for saving to CSV
+def save_csv_popup():
+    if not todolistbox.curselection():
+        messagebox.showwarning("No List Selected", "Please select a to-do list to save.")
+        return
+    
+    selected_index = todolistbox.curselection()[0]
+    selected_list = todolist_list[selected_index]
+
+    popup = Toplevel(window)
+    popup.title("Save to CSV")
+    popup.geometry("300x150")
+    popup.config(bg="#f0f0f0")
+    popup.transient(window)
+    popup.grab_set()
+
+    popup.grid_columnconfigure(0, weight=1)
+    popup.grid_columnconfigure(1, weight=3)
+    popup.grid_rowconfigure(0, weight=1)
+    popup.grid_rowconfigure(1, weight=1)
+    popup.grid_rowconfigure(2, weight=1)
+
+    Label(popup, text="Filename:", bg="#f0f0f0", font=default_font).grid(row=0, column=0, padx=10, pady=10, sticky="e")
+    filename_entry = Entry(popup, font=default_font)
+    filename_entry.insert(0, selected_list.list_name)  # Pre-fill with list name
+    filename_entry.grid(row=0, column=1, padx=10, pady=10, sticky="ew")
+
+    def submit_save_csv():
+        filename = filename_entry.get().strip()
+        if not filename:
+            messagebox.showerror("Input Error", "Filename cannot be empty.")
+            return
+        if selected_list.saveCSV(filename):
+            messagebox.showinfo("Success", f"To-Do List '{selected_list.list_name}' saved to '{filename}'.")
+            popup.destroy()
+        else:
+            messagebox.showerror("Error", f"Failed to save '{selected_list.list_name}' to '{filename}'.")
+
+    Button(popup, text="Save", command=submit_save_csv, bg="#4CAF50", fg="white", font=default_font).grid(row=1, column=0, columnspan=2, pady=5, padx=10, sticky="ew")
+    Button(popup, text="Cancel", command=popup.destroy, bg="#ddd", fg="black", font=default_font).grid(row=2, column=0, columnspan=2, pady=5, padx=10, sticky="ew")
+
+
 # Buttons 
 addtask_button = Button(button_frame, text="Add Task", command=add_task_popup, bg="#4CAF50", fg="white", font=default_font)
 addtask_button.pack(fill="x", pady=2)
@@ -290,5 +334,9 @@ removetask_button.pack(fill="x", pady=2)
 
 delete_list_button = Button(button_frame, text="Delete List", command=delete_list_popup, bg="#f44336", fg="white", font=default_font)
 delete_list_button.pack(fill="x", pady=2)
+
+save_csv_button = Button(button_frame, text="Save list", command=save_csv_popup, bg="#2196F3", fg="white", font=default_font)
+save_csv_button.pack(fill="x", pady=2)
+
 
 window.mainloop()
